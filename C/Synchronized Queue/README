@@ -1,0 +1,4 @@
+
+compile  and link with:
+
+gcc -pthread -o queue test.c
