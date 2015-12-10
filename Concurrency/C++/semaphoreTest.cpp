@@ -13,14 +13,14 @@ using std::thread;
 
 std::chrono::milliseconds oneMilliSecond(1);
 
-void threadFunction(concurrency::Semaphore* semaphore)
+void threadFunction(concurrency::Semaphore& semaphore)
 {
-	bool succesfullyAcquired = semaphore->tryAcquire();
+	bool succesfullyAcquired = semaphore.tryAcquire();
 
 	if (succesfullyAcquired) {
 		cout << "Thread acquired a permit from the semaphore.\n";
 		std::this_thread::sleep_for(100 * oneMilliSecond);
-		semaphore->release();
+		semaphore.release();
 	} else {
 		cout << "The thread did not acquire a permit. \n";
 	}
@@ -31,7 +31,7 @@ int main()
 
 	concurrency::Semaphore semaphore{5};
 
-	cout << "Testring semaphore with 5 permits. \n";
+	cout << "Testing semaphore with 5 permits. \n";
 	cout << semaphore.tryAcquire() << "\n";
 	cout << semaphore.tryAcquire() << "\n";
 	cout << semaphore.tryAcquire() << "\n";
@@ -64,7 +64,7 @@ int main()
 	const int numberOfThreads{10};
 
 	for (int i = 0; i < numberOfThreads; i++)
-		threads.push_back(thread(threadFunction, &semaphore));
+		threads.push_back(thread(threadFunction, std::ref(semaphore)));
 
 	for (thread& t : threads)
 		t.join();
