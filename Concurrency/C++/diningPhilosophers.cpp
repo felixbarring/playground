@@ -7,6 +7,8 @@
 #include <memory>
 #include <chrono>
 
+#include <semaphore.h>
+
 std::chrono::milliseconds oneMilliSecond(1);
 
 class Philosopher {
@@ -60,6 +62,8 @@ public:
 
 int main()
 {
+
+	concurrency::Semaphore semaphore;
 
 	std::vector<std::shared_ptr<std::mutex>> forks{
 		std::shared_ptr<std::mutex>{new std::mutex},
